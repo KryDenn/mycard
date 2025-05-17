@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Tarjeta Qik Visa</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .card-container {
+      width: 340px;
+      height: 220px;
+      perspective: 1000px;
+    }
+
+    .card {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transition: transform 0.8s;
+      transform-style: preserve-3d;
+    }
+
+    .card.flipped {
+      transform: rotateY(180deg);
+    }
+
+    .card-side {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 16px;
+      overflow: hidden;
+      color: white;
+    }
+
+    .card-front {
+      background: #0084cb;
+    }
+
+    .card-back {
+      background: #0084cb;
+      transform: rotateY(180deg);
+    }
+
+    .qik-logo {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      font-size: 26px;
+      font-weight: bold;
+    }
+
+    .qik-logo span {
+      color: #013e7d;
+    }
+
+    .chip-nfc {
+      position: absolute;
+      top: 60px;
+      left: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .chip {
+      width: 45px;
+      height: 35px;
+      background: linear-gradient(135deg, #e6b800, #cc9900);
+      border-radius: 4px;
+      box-shadow: 0 0 2px rgba(0,0,0,0.3);
+    }
+
+    .nfc-icon {
+      font-size: 16px;
+      color: white;
+      transform: rotate(90deg);
+      opacity: 0.9;
+    }
+
+    .number-row {
+      position: absolute;
+      top: 112px;
+      left: 20px;
+      display: flex;
+      align-items: center;
+      font-family: 'Courier New', monospace;
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 3px;
+      color: white;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.6); /* relieve */
+    }
+
+    .number-row input {
+      all: unset;
+      color: white;
+      font-size: 15px;
+      letter-spacing: 3px;
+      width: 230px;
+      overflow: hidden;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.6); /* relieve */
+    }
+
+    .copy-icon {
+      font-size: 12px;
+      color: white;
+      cursor: pointer;
+      margin-left: 8px;
+      user-select: none;
+    }
+
+    .expiry {
+      position: absolute;
+      top: 138px;
+      left: 20px;
+      font-size: 12px;
+    }
+
+    .cardholder {
+      position: absolute;
+      top: 155px;
+      left: 20px;
+      font-size: 13px;
+      font-weight: bold;
+      z-index: 2;
+    }
+
+    .card-bottom {
+      height: 80px;
+      background-color: #ff6000;
+      border-radius: 150% 0 0 0;
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      z-index: 1;
+    }
+
+    .visa {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      font-size: 24px;
+      font-style: italic;
+    }
+
+    .black-strip {
+      background: black;
+      height: 40px;
+      margin: 30px 0;
+    }
+
+    .cvv {
+      background: white;
+      color: black;
+      padding: 8px 12px;
+      border-radius: 4px;
+      width: fit-content;
+      position: absolute;
+      right: 20px;
+      bottom: 80px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="card-container" id="cardContainer">
+  <div class="card" id="card">
+
+    <!-- Frente -->
+    <div class="card-side card-front">
+      <div class="qik-logo"><span>Q</span>ik</div>
+
+      <div class="chip-nfc">
+        <div class="chip"></div>
+        <i class="fa-solid fa-wifi nfc-icon"></i>
+      </div>
+
+      <div class="number-row">
+        <input type="text" value="4921 9700 1613 1844" readonly id="cardNumber">
+        <i class="fa-solid fa-clipboard copy-icon" id="copyBtn"></i>
+      </div>
+
+      <div class="expiry">11/28</div>
+      <div class="cardholder">KEURY MEDINA</div>
+
+      <div class="card-bottom"></div>
+      <div class="visa">VISA</div>
+    </div>
+
+    <!-- Atrás -->
+    <div class="card-side card-back">
+      <div class="black-strip"></div>
+      <div class="cvv">CVV: 000</div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  const cardContainer = document.getElementById("cardContainer");
+  const card = document.getElementById("card");
+  const copyBtn = document.getElementById("copyBtn");
+  const cardNumber = document.getElementById("cardNumber");
+
+  cardContainer.addEventListener("dblclick", () => {
+    card.classList.toggle("flipped");
+  });
+
+  copyBtn.addEventListener("click", () => {
+    navigator.clipboard.writeText(cardNumber.value).then(() => {
+      copyBtn.classList.remove('fa-clipboard');
+      copyBtn.classList.add('fa-check');
+      setTimeout(() => {
+        copyBtn.classList.remove('fa-check');
+        copyBtn.classList.add('fa-clipboard');
+      }, 1000);
+    });
+  });
+</script>
+
+</body>
+</html>
